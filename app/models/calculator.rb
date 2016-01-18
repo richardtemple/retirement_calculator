@@ -2,7 +2,10 @@ class Calculator < ActiveRecord::Base
 	def calculate
 
     retirement_age = 10
-    yearly_retirement_income = 1000
+    self.yearly_retirement_income = 1000
+
+    return self
+
     # years_until_retirement = this.retirement_age - this.current_age
     # years_of_retirement = @calculator.withdraw_until_age.to_i - @calculator.retirement_age.to_i
     # current_savings = @calculator.current_savings
