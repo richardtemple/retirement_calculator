@@ -2,8 +2,19 @@ require 'test_helper'
 
 class CalculatorTest < ActiveSupport::TestCase
   test "should update yearly retirement income field" do
-    calc = Calculator.new.calculate
-    
+    calc = Calculator.new
+    calc.current_savings       = 10000
+    calc.interest_rate         = 8
+    calc.yearly_contributions  = 20000
+    calc.inflate_contributions = 0
+    calc.inflation_rate        = 3
+    calc.current_age           = 45
+    calc.retirement_age        = 65
+    calc.withdraw_until_age    = 100
+    calc.post_retire_interest_rate = 5
+    calc.retirement_tax_rate   = 7
+    calc.show_in_todays_dollars = 0
+    calc = calc.calculate
     assert calc != nil, "calc shouldn't be nil"
 
     assert calc.yearly_retirement_income != nil,
