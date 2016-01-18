@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  current_savings: 1.5
+  interest_rate: 1.5
+  yearly_contributions: 1.5
+  inflate_contributions: false
+  inflation_rate: 1.5
+  current_age: 1
+  retirement_age: 1
+  withdraw_until_age: 1
+  post_retire_interest_rate: 1.5
+  retirement_tax_rate: 1.5
+  show_in_todays_dollars: false
+  yearly_retirement_income: 1.5
+
+two:
+  current_savings: 1.5
+  interest_rate: 1.5
+  yearly_contributions: 1.5
+  inflate_contributions: false
+  inflation_rate: 1.5
+  current_age: 1
+  retirement_age: 1
+  withdraw_until_age: 1
+  post_retire_interest_rate: 1.5
+  retirement_tax_rate: 1.5
+  show_in_todays_dollars: false
+  yearly_retirement_income: 1.5

@@ -1,0 +1,65 @@
+<%= form_for(@calculator) do |f| %>
+  <% if @calculator.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@calculator.errors.count, "error") %> prohibited this calculator from being saved:</h2>
+
+      <ul>
+      <% @calculator.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :current_savings %><br>
+    <%= f.text_field :current_savings %>
+  </div>
+  <div class="field">
+    <%= f.label :interest_rate %><br>
+    <%= f.text_field :interest_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :yearly_contributions %><br>
+    <%= f.text_field :yearly_contributions %>
+  </div>
+  <div class="field">
+    <%= f.label :inflate_contributions %><br>
+    <%= f.check_box :inflate_contributions %>
+  </div>
+  <div class="field">
+    <%= f.label :inflation_rate %><br>
+    <%= f.text_field :inflation_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :current_age %><br>
+    <%= f.number_field :current_age %>
+  </div>
+  <div class="field">
+    <%= f.label :retirement_age %><br>
+    <%= f.number_field :retirement_age %>
+  </div>
+  <div class="field">
+    <%= f.label :withdraw_until_age %><br>
+    <%= f.number_field :withdraw_until_age %>
+  </div>
+  <div class="field">
+    <%= f.label :post_retire_interest_rate %><br>
+    <%= f.text_field :post_retire_interest_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :retirement_tax_rate %><br>
+    <%= f.text_field :retirement_tax_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :show_in_todays_dollars %><br>
+    <%= f.check_box :show_in_todays_dollars %>
+  </div>
+  <div class="field">
+    <%= f.label :yearly_retirement_income %><br>
+    <%= f.text_field :yearly_retirement_income %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
