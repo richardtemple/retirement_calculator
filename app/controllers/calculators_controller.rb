@@ -15,6 +15,18 @@ class CalculatorsController < ApplicationController
   # GET /calculators/new
   def new
     @calculator = Calculator.new
+    @calculator.current_savings       = 10000
+    @calculator.interest_rate         = 8
+    @calculator.yearly_contributions  = 20000
+    @calculator.inflate_contributions = 0
+    @calculator.inflation_rate        = 3
+    @calculator.current_age           = 45
+    @calculator.retirement_age        = 65
+    @calculator.withdraw_until_age    = 100
+    @calculator.post_retire_interest_rate = 5
+    @calculator.retirement_tax_rate   = 7
+    @calculator.show_in_todays_dollars = 0
+    @calculator.yearly_retirement_income = 9
   end
 
   # GET /calculators/1/edit
@@ -24,8 +36,8 @@ class CalculatorsController < ApplicationController
   # POST /calculators
   # POST /calculators.json
   def create
-    @calculator = Calculator.new(calculator_params)
-    @calculator.calculate
+    @calculator = Calculator.new(calculator_params).calculate
+
     respond_to do |format|
       if @calculator.save
         format.html { redirect_to @calculator, notice: 'Calculator was successfully created.' }

@@ -8,7 +8,5 @@ class CalculatorTest < ActiveSupport::TestCase
 
     assert calc.yearly_retirement_income != nil,
     			"yearly_retirement_income should not be nil"
-    assert calc.yearly_retirement_income == 1000,
-     "Am I right?"
 	end
 end
