@@ -1,64 +1,10 @@
+
+<h1>Retirement Calculator</h1>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Current savings:</strong>
-  <%= @calculator.current_savings %>
-</p>
+<%= render 'form' %>
 
-<p>
-  <strong>Interest rate:</strong>
-  <%= @calculator.interest_rate %>
-</p>
-
-<p>
-  <strong>Yearly contributions:</strong>
-  <%= @calculator.yearly_contributions %>
-</p>
-
-<p>
-  <strong>Inflate contributions:</strong>
-  <%= @calculator.inflate_contributions %>
-</p>
-
-<p>
-  <strong>Inflation rate:</strong>
-  <%= @calculator.inflation_rate %>
-</p>
-
-<p>
-  <strong>Current age:</strong>
-  <%= @calculator.current_age %>
-</p>
-
-<p>
-  <strong>Retirement age:</strong>
-  <%= @calculator.retirement_age %>
-</p>
-
-<p>
-  <strong>Withdraw until age:</strong>
-  <%= @calculator.withdraw_until_age %>
-</p>
-
-<p>
-  <strong>Post retire interest rate:</strong>
-  <%= @calculator.post_retire_interest_rate %>
-</p>
-
-<p>
-  <strong>Retirement tax rate:</strong>
-  <%= @calculator.retirement_tax_rate %>
-</p>
-
-<p>
-  <strong>Show in todays dollars:</strong>
-  <%= @calculator.show_in_todays_dollars %>
-</p>
-
-<p>
-  <strong>Yearly retirement income:</strong>
-  <%= @calculator.yearly_retirement_income %>
-</p>
+<%= link_to 'Back', calculators_path %>
 
 <%= link_to 'Edit', edit_calculator_path(@calculator) %> |
 <%= link_to 'Back', calculators_path %>
