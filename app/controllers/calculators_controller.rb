@@ -25,7 +25,7 @@ class CalculatorsController < ApplicationController
   # POST /calculators.json
   def create
     @calculator = Calculator.new(calculator_params)
-
+    @calculator.calculate
     respond_to do |format|
       if @calculator.save
         format.html { redirect_to @calculator, notice: 'Calculator was successfully created.' }
