@@ -1,28 +1,7 @@
-== README
+== Retirment Calculator
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a rails application to calculate a future yearly income based on data entered.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Currently it is a work in progress.  
+Check issues for my current "to do" list
+Check the wiki for updates on it's status.
