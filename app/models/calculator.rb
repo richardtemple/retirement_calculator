@@ -1,5 +1,5 @@
 class Calculator < ActiveRecord::Base
-	include ActionView::Helpers::NumberHelper
+	# include ActionView::Helpers::NumberHelper
 
 	def calculate
 
@@ -41,12 +41,12 @@ class Calculator < ActiveRecord::Base
           (top_part / bottom_part) * 
             (Math::E ** ((-self.inflation_rate.to_f / 100) * years_of_retirement))
       self.yearly_retirement_income = 
-        number_to_currency(after_inflation_yearly_rate * (1-(self.retirement_tax_rate.to_f/100)))
+        after_inflation_yearly_rate * (1-(self.retirement_tax_rate.to_f/100))
     else
       self.yearly_retirement_income =  
-        number_to_currency((top_part / bottom_part)* (1-(self.retirement_tax_rate.to_f/100)))
+        (top_part / bottom_part)* (1-(self.retirement_tax_rate.to_f/100))
     end
-    logger.info(number_to_currency(10230.00))
+    # logger.info(number_to_currency(10230.00))
     logger.info "Retirement income should be... " + self.yearly_retirement_income.to_s
     # self.save!
     return self
