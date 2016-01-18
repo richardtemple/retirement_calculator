@@ -60,6 +60,6 @@
   </div>
   <div class="field">
     <%= f.label :yearly_retirement_income %><br>
-    <%= f.text_field :yearly_retirement_income %>
+    <%= number_to_currency @calculator.yearly_retirement_income %>
   </div>
 <% end %>
