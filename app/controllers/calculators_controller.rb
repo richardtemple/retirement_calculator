@@ -1,23 +1,24 @@
 class CalculatorsController < ApplicationController
-  before_action :set_calculator, only: [:show, :edit, :update, :destroy]
+  before_action :set_calculator #, only: [:show, :edit, :update, :destroy]
 
   # GET /calculators
   # GET /calculators.json
-  def index
-    @calculators = Calculator.all
-  end
+  # def index
+  #   @calculators = Calculator.all
+  # end
 
-  # GET /calculators/1
-  # GET /calculators/1.json
-  def show
-  end
+  # # GET /calculators/1
+  # # GET /calculators/1.json
+  # def show
+  # end
 
-  # GET /calculators/new
+  # # GET /calculators/new
   def new
+    Rails.logger.info "new start"
     @calculator = Calculator.new
     @calculator.current_savings       = 10000
     @calculator.interest_rate         = 8
-    @calculator.yearly_contributions  = 20000
+    @calculator.annual_contributions  = 20000
     @calculator.inflate_contributions = 0
     @calculator.inflation_rate        = 3
     @calculator.current_age           = 45
@@ -26,7 +27,6 @@ class CalculatorsController < ApplicationController
     @calculator.post_retire_interest_rate = 5
     @calculator.retirement_tax_rate   = 7
     @calculator.show_in_todays_dollars = 0
-    @calculator.yearly_retirement_income = 9
   end
 
   # GET /calculators/1/edit
@@ -36,7 +36,8 @@ class CalculatorsController < ApplicationController
   # POST /calculators
   # POST /calculators.json
   def create
-    @calculator = Calculator.new(calculator_params).calculate
+    Rails.logger.info "create start"
+    @calculator = Calculator.new #(calculator_params).update
 
     respond_to do |format|
       if @calculator.save
@@ -52,9 +53,10 @@ class CalculatorsController < ApplicationController
   # PATCH/PUT /calculators/1
   # PATCH/PUT /calculators/1.json
   def update
+    Rails.logger.info "update start"
     respond_to do |format|
       if @calculator.update(calculator_params)
-        format.html { redirect_to @calculator, notice: 'Calculator was successfully updated.' }
+        format.html { render :edit, notice: 'Calculator was successfully updated.' }
         format.json { render :show, status: :ok, location: @calculator }
       else
         format.html { render :edit }
@@ -63,24 +65,39 @@ class CalculatorsController < ApplicationController
     end
   end
 
-  # DELETE /calculators/1
-  # DELETE /calculators/1.json
-  def destroy
-    @calculator.destroy
-    respond_to do |format|
-      format.html { redirect_to calculators_url, notice: 'Calculator was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+  # # DELETE /calculators/1
+  # # DELETE /calculators/1.json
+  # def destroy
+  #   @calculator.destroy
+  #   respond_to do |format|
+  #     format.html { redirect_to calculators_url, notice: 'Calculator was successfully destroyed.' }
+  #     format.json { head :no_content }
+  #   end
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_calculator
-      @calculator = Calculator.find(params[:id])
+      Rails.logger.info "set_calculator"
+      @calculator = Calculator.new(calculator_params)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculator_params
-      params.require(:calculator).permit(:current_savings, :interest_rate, :yearly_contributions, :inflate_contributions, :inflation_rate, :current_age, :retirement_age, :withdraw_until_age, :post_retire_interest_rate, :retirement_tax_rate, :show_in_todays_dollars, :yearly_retirement_income)
+      if params[:calculator]
+        params.require(:calculator).permit(:current_savings, 
+                                           :interest_rate, 
+                                           :annual_contributions, 
+                                           :inflate_contributions, 
+                                           :inflation_rate, 
+                                           :current_age, 
+                                           :retirement_age, 
+                                           :withdraw_until_age, 
+                                           :post_retire_interest_rate, 
+                                           :retirement_tax_rate, 
+                                           :show_in_todays_dollars)
+      else
+        nil
+      end
     end
 end

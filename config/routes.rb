@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
-  resources :calculators
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
+  get   '/financial_calculator/',   to: 'calculators#edit',   as: 'edit_calculator'
+  put   '/financial_calculator/',   to: 'calculators#update', as: 'calculator'
+  patch '/financial_calculator/',   to: 'calculators#update'
+  post  '/financial_calculator/',   to: 'calculators#update'
   root 'calculators#new'
 
   # Example of regular route:
