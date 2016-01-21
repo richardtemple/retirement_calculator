@@ -72,7 +72,7 @@ class Calculator # < ActiveRecord::Base
 
 # This causes the checkbox to stay checked
   # def show_in_todays_dollars=(show)
-  #   if show == "1"
+  #   if show == 1
   #     @show_in_todays_dollars = true
   #   else
   #     @show_in_todays_dollars = false
