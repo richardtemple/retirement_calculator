@@ -54,7 +54,34 @@ class Calculator # < ActiveRecord::Base
     end
   end
 
+  def inflate_contributions?
+    if @inflate_contributions == "1"
+      true
+    else
+      false
+    end
+  end
+
+  def show_in_todays_dollars?
+    if @show_in_todays_dollars == "1"
+      true
+    else
+      false
+    end
+  end
+
+# This causes the checkbox to stay checked
+  # def show_in_todays_dollars=(show)
+  #   if show == "1"
+  #     @show_in_todays_dollars = true
+  #   else
+  #     @show_in_todays_dollars = false
+  #   end
+  # end
+
+
   private
+
 
 		def calculate
 
@@ -70,7 +97,7 @@ class Calculator # < ActiveRecord::Base
 	      current_savings     = current_savings * ((this_years_interest / 100) + 1)
 	      current_savings     = current_savings + current_contribution
 
-	      if (self.inflate_contributions == "1") # Better way?!?
+	      if (inflate_contributions?) # Better way?!?
 	        Rails.logger.info "Inflate contributions was true!"
 	        current_contribution = current_contribution.to_i * (1 + (self.inflation_rate.to_f / 100))
 	        Rails.logger.info "Current Contribution = " + current_contribution.to_s
@@ -85,7 +112,8 @@ class Calculator # < ActiveRecord::Base
 	    Rails.logger.info "top part = " + top_part.to_s
 	    Rails.logger.info "bottom part = " + bottom_part.to_s
 
-	    if (self.show_in_todays_dollars == "1")
+	    if (show_in_todays_dollars?)
+        Rails.logger.info ("show_in_todays_dollars was checked")
 	      # PV * e ** rt 
 	      after_inflation_yearly_rate = 
 	          (top_part / bottom_part) * 
