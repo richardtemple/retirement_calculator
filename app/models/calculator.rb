@@ -13,7 +13,7 @@ class Calculator # < ActiveRecord::Base
                 :post_retire_interest_rate,
                 :retirement_tax_rate,
                 :show_in_todays_dollars
-                
+
   attr_reader :yearly_retirement_income
 
 	validates_numericality_of :current_savings,
@@ -97,7 +97,7 @@ class Calculator # < ActiveRecord::Base
 	      current_savings     = current_savings * ((this_years_interest / 100) + 1)
 	      current_savings     = current_savings + current_contribution
 
-	      if (inflate_contributions?) # Better way?!?
+	      if (inflate_contributions?)
 	        Rails.logger.info "Inflate contributions was true!"
 	        current_contribution = current_contribution.to_i * (1 + (self.inflation_rate.to_f / 100))
 	        Rails.logger.info "Current Contribution = " + current_contribution.to_s

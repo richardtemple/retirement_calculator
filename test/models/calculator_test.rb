@@ -22,6 +22,8 @@ class CalculatorTest < ActiveSupport::TestCase
   end
 
   test "should provide default values when new" do
+    calc = Calculator.new
+    assert (calc.current_savings > 0)
   end
   
 end
