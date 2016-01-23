@@ -1,5 +1,5 @@
 class CalculatorsController < ApplicationController
-  before_action :set_calculator #, only: [:show, :edit, :update, :destroy]
+  before_action :set_calculator, only: [:edit, :update]
 
   # GET /calculators
   # GET /calculators.json
@@ -12,43 +12,33 @@ class CalculatorsController < ApplicationController
   # def show
   # end
 
-  # # GET /calculators/new
   def new
-    Rails.logger.info "new start"
     @calculator = Calculator.new
-    @calculator.current_savings       = 10000
-    @calculator.interest_rate         = 8
-    @calculator.annual_contributions  = 20000
-    @calculator.inflate_contributions = 0
-    @calculator.inflation_rate        = 3
-    @calculator.current_age           = 45
-    @calculator.retirement_age        = 65
-    @calculator.withdraw_until_age    = 100
-    @calculator.post_retire_interest_rate = 5
-    @calculator.retirement_tax_rate   = 7
-    @calculator.show_in_todays_dollars = 0
+    respond_to do |format|
+      format.html { render :edit }
+    end
   end
 
   # GET /calculators/1/edit
   def edit
   end
 
-  # POST /calculators
-  # POST /calculators.json
-  def create
-    Rails.logger.info "create start"
-    @calculator = Calculator.new #(calculator_params).update
+  # # POST /calculators
+  # # POST /calculators.json
+  # def create
+  #   Rails.logger.info "create start"
+  #   @calculator = Calculator.new #(calculator_params).update
 
-    respond_to do |format|
-      if @calculator.save
-        format.html { redirect_to @calculator, notice: 'Calculator was successfully created.' }
-        format.json { render :show, status: :created, location: @calculator }
-      else
-        format.html { render :new }
-        format.json { render json: @calculator.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @calculator.save
+  #       format.html { redirect_to @calculator, notice: 'Calculator was successfully created.' }
+  #       format.json { render :show, status: :created, location: @calculator }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @calculator.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PATCH/PUT /calculators/1
   # PATCH/PUT /calculators/1.json
@@ -96,8 +86,6 @@ class CalculatorsController < ApplicationController
                                            :post_retire_interest_rate, 
                                            :retirement_tax_rate, 
                                            :show_in_todays_dollars)
-      else
-        nil
       end
     end
 end

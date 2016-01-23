@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   put   '/financial_calculator/',   to: 'calculators#update', as: 'calculator'
   patch '/financial_calculator/',   to: 'calculators#update'
   post  '/financial_calculator/',   to: 'calculators#update'
-  root 'calculators#new'
+  root  'calculators#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

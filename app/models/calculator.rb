@@ -28,15 +28,15 @@ class Calculator # < ActiveRecord::Base
 
 	DEFAULT_VALUES = {
     current_savings: 100.0,
-    interest_rate: 0.08,
+    interest_rate: 8,
     annual_contributions: 20000.0,
     inflate_contributions: false,
-    inflation_rate: 0.03,
+    inflation_rate: 3,
     current_age: 45,
     retirement_age: 65,
     withdraw_until_age: 100,
-    post_retire_interest_rate: 0.05,
-    retirement_tax_rate: 0.07,
+    post_retire_interest_rate: 5,
+    retirement_tax_rate: 9,
     show_in_todays_dollars: false
   }
 
