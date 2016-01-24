@@ -85,34 +85,16 @@ class Calculator # < ActiveRecord::Base
 
 		def calculate
 
-	    years_of_retirement = self.withdraw_until_age.to_i - self.retirement_age.to_i
 	    current_savings = self.current_savings.to_f
 
       current_savings = pre_retirement_calculations current_savings
+      retirment_calculations current_savings
 
-	    Rails.logger.info "Calc.post_retire_interest_rate.to_f / 100 = " + (self.post_retire_interest_rate.to_f / 100).to_s 
-
-	    top_part = (self.post_retire_interest_rate.to_f / 100) * current_savings
-	    bottom_part = 1 - (1 + (self.post_retire_interest_rate.to_f / 100))**(-years_of_retirement)
-	    Rails.logger.info "top part = " + top_part.to_s
-	    Rails.logger.info "bottom part = " + bottom_part.to_s
-
-	    if (show_in_todays_dollars?)
-        Rails.logger.info ("show_in_todays_dollars was checked")
-	      # PV * e ** rt 
-	      after_inflation_yearly_rate = 
-	          (top_part / bottom_part) * 
-	            (Math::E ** ((-self.inflation_rate.to_f / 100) * years_of_retirement))
-	      @yearly_retirement_income = 
-	        after_inflation_yearly_rate * (1-(self.retirement_tax_rate.to_f/100))
-	    else
-	      @yearly_retirement_income =  
-	        (top_part / bottom_part)* (1-(self.retirement_tax_rate.to_f/100))
-	    end
 	    # Rails.logger.info(number_to_currency(10230.00))
 	    Rails.logger.info "Retirement income should be... " + self.yearly_retirement_income.to_s
 	    # self.save!
 	    return self
+
 	  end
 
     def pre_retirement_calculations current_savings
@@ -134,6 +116,30 @@ class Calculator # < ActiveRecord::Base
         end
         Rails.logger.info current_savings
       end
-      current_savings #retun
+      current_savings #return
+    end
+
+    def retirment_calculations current_savings
+
+      years_of_retirement = self.withdraw_until_age.to_i - self.retirement_age.to_i
+      Rails.logger.info "Calc.post_retire_interest_rate.to_f / 100 = " + (self.post_retire_interest_rate.to_f / 100).to_s 
+
+      top_part = (self.post_retire_interest_rate.to_f / 100) * current_savings
+      bottom_part = 1 - (1 + (self.post_retire_interest_rate.to_f / 100))**(-years_of_retirement)
+      Rails.logger.info "top part = " + top_part.to_s
+      Rails.logger.info "bottom part = " + bottom_part.to_s
+
+      if (show_in_todays_dollars?)
+        Rails.logger.info ("show_in_todays_dollars was checked")
+        # PV * e ** rt 
+        after_inflation_yearly_rate = 
+            (top_part / bottom_part) * 
+              (Math::E ** ((-self.inflation_rate.to_f / 100) * years_of_retirement))
+        @yearly_retirement_income = 
+          after_inflation_yearly_rate * (1-(self.retirement_tax_rate.to_f/100))
+      else
+        @yearly_retirement_income =  
+          (top_part / bottom_part)* (1-(self.retirement_tax_rate.to_f/100))
+      end
     end
 end
