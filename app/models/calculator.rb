@@ -85,25 +85,10 @@ class Calculator # < ActiveRecord::Base
 
 		def calculate
 
-	    years_until_retirement = self.retirement_age.to_i - self.current_age.to_i
 	    years_of_retirement = self.withdraw_until_age.to_i - self.retirement_age.to_i
 	    current_savings = self.current_savings.to_f
-	    current_contribution = self.annual_contributions.to_f
-	    this_years_interest = self.interest_rate.to_f - self.inflation_rate.to_f 
-	    Rails.logger.info "This years interest: " + this_years_interest.to_s
 
-	    years_until_retirement.to_i.times do 
-	        
-	      current_savings     = current_savings * ((this_years_interest / 100) + 1)
-	      current_savings     = current_savings + current_contribution
-
-	      if (inflate_contributions?)
-	        Rails.logger.info "Inflate contributions was true!"
-	        current_contribution = current_contribution.to_i * (1 + (self.inflation_rate.to_f / 100))
-	        Rails.logger.info "Current Contribution = " + current_contribution.to_s
-	      end
-	      Rails.logger.info current_savings
-	    end
+      current_savings = pre_retirement_calculations current_savings
 
 	    Rails.logger.info "Calc.post_retire_interest_rate.to_f / 100 = " + (self.post_retire_interest_rate.to_f / 100).to_s 
 
@@ -129,4 +114,26 @@ class Calculator # < ActiveRecord::Base
 	    # self.save!
 	    return self
 	  end
+
+    def pre_retirement_calculations current_savings
+
+      years_until_retirement = self.retirement_age.to_i - self.current_age.to_i
+      current_contribution   = self.annual_contributions.to_f
+      this_years_interest = self.interest_rate.to_f - self.inflation_rate.to_f 
+      Rails.logger.info "This years interest: " + this_years_interest.to_s
+
+      years_until_retirement.to_i.times do 
+          
+        current_savings     = current_savings * ((this_years_interest / 100) + 1)
+        current_savings     = current_savings + current_contribution
+
+        if (inflate_contributions?)
+          Rails.logger.info "Inflate contributions was true!"
+          current_contribution = current_contribution.to_i * (1 + (self.inflation_rate.to_f / 100))
+          Rails.logger.info "Current Contribution = " + current_contribution.to_s
+        end
+        Rails.logger.info current_savings
+      end
+      current_savings #retun
+    end
 end
