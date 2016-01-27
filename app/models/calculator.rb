@@ -82,17 +82,14 @@ class Calculator # < ActiveRecord::Base
 
   private
 
-
 		def calculate
 
 	    current_savings = self.current_savings.to_f
 
       current_savings = pre_retirement_calculations current_savings
-      retirment_calculations current_savings
+      retirement_calculations current_savings
 
-	    # Rails.logger.info(number_to_currency(10230.00))
 	    Rails.logger.info "Retirement income should be... " + self.yearly_retirement_income.to_s
-	    # self.save!
 	    return self
 
 	  end
@@ -101,45 +98,51 @@ class Calculator # < ActiveRecord::Base
 
       years_until_retirement = self.retirement_age.to_i - self.current_age.to_i
       current_contribution   = self.annual_contributions.to_f
-      this_years_interest = self.interest_rate.to_f - self.inflation_rate.to_f 
-      Rails.logger.info "This years interest: " + this_years_interest.to_s
+
+      this_years_interest  = (self.interest_rate.to_f) / 100
 
       years_until_retirement.to_i.times do 
-          
-        current_savings     = current_savings * ((this_years_interest / 100) + 1)
-        current_savings     = current_savings + current_contribution
-
+        
+        current_savings      = current_savings * (this_years_interest + 1)
+        Rails.logger.info "Current savings after interest: #{current_savings}"
+        current_savings      = current_savings + current_contribution
+        Rails.logger.info "Current savings after payment: #{current_savings}"
+        
         if (inflate_contributions?)
-          Rails.logger.info "Inflate contributions was true!"
-          current_contribution = current_contribution.to_i * (1 + (self.inflation_rate.to_f / 100))
+          Rails.logger.info "Inflate contributions was true."
+          current_contribution = current_contribution * 
+                                    (1 + (self.inflation_rate.to_f / 100))
+          
           Rails.logger.info "Current Contribution = " + current_contribution.to_s
         end
-        Rails.logger.info current_savings
+        Rails.logger.info "Current savings: #{current_savings}"
       end
+
       current_savings #return
     end
 
-    def retirment_calculations current_savings
+    def retirement_calculations current_savings
 
       years_of_retirement = self.withdraw_until_age.to_i - self.retirement_age.to_i
-      Rails.logger.info "Calc.post_retire_interest_rate.to_f / 100 = " + (self.post_retire_interest_rate.to_f / 100).to_s 
+      retirement_int_rate = self.post_retire_interest_rate.to_f / 100
 
-      top_part = (self.post_retire_interest_rate.to_f / 100) * current_savings
-      bottom_part = 1 - (1 + (self.post_retire_interest_rate.to_f / 100))**(-years_of_retirement)
-      Rails.logger.info "top part = " + top_part.to_s
-      Rails.logger.info "bottom part = " + bottom_part.to_s
+      numerator = retirement_int_rate * current_savings
+      denominator = 1 - (1 + retirement_int_rate)**(-years_of_retirement)
+
+      Rails.logger.info "numerator = " + numerator.to_s
+      Rails.logger.info "denominator = " + denominator.to_s
 
       if (show_in_todays_dollars?)
         Rails.logger.info ("show_in_todays_dollars was checked")
         # PV * e ** rt 
         after_inflation_yearly_rate = 
-            (top_part / bottom_part) * 
+            (numerator / denominator) * 
               (Math::E ** ((-self.inflation_rate.to_f / 100) * years_of_retirement))
         @yearly_retirement_income = 
           after_inflation_yearly_rate * (1-(self.retirement_tax_rate.to_f/100))
       else
         @yearly_retirement_income =  
-          (top_part / bottom_part)* (1-(self.retirement_tax_rate.to_f/100))
+          (numerator / denominator)* (1-(self.retirement_tax_rate.to_f/100))
       end
     end
 end
