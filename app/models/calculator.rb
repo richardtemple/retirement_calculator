@@ -27,7 +27,7 @@ class Calculator # < ActiveRecord::Base
                             :retirement_tax_rate
 
 	DEFAULT_VALUES = {
-    current_savings: 100.0,
+    current_savings: 100000.0,
     interest_rate: 8,
     annual_contributions: 20000.0,
     inflate_contributions: false,
@@ -36,7 +36,7 @@ class Calculator # < ActiveRecord::Base
     retirement_age: 65,
     withdraw_until_age: 100,
     post_retire_interest_rate: 5,
-    retirement_tax_rate: 9,
+    retirement_tax_rate: 7,
     show_in_todays_dollars: false
   }
 
@@ -128,16 +128,14 @@ class Calculator # < ActiveRecord::Base
       retirement_int_rate    = self.post_retire_interest_rate.to_f / 100
       infl_rate              = self.inflation_rate.to_f / 100
       
+      # http://www.financeformulas.net/
       numerator = retirement_int_rate - infl_rate
       denominator = 1 - ((1 + infl_rate)/(1 + retirement_int_rate))**years_of_retirement
 
       yearly_ret_val_pretax = current_savings * (numerator/denominator)
 
-
-      # http://www.financeformulas.net/
-
       # should the current_savings value might need initial adjustment for 
-      # inflation if show in today's dollars is checked.
+      # inflation if show in today's dollars is checked?
 
       Rails.logger.info "numerator = " + numerator.to_s
       Rails.logger.info "denominator = " + denominator.to_s
