@@ -84,22 +84,22 @@ class Calculator # < ActiveRecord::Base
 
 		def calculate
 
-	    current_savings = self.current_savings.to_f
+	    current_savings = @current_savings.to_f
 
       current_savings = pre_retirement_calculations current_savings
       retirement_calculations current_savings
 
-	    Rails.logger.info "Retirement income should be... " + self.yearly_retirement_income.to_s
+	    Rails.logger.info "Retirement income should be... " + @yearly_retirement_income.to_s
 	    return self
 
 	  end
 
     def pre_retirement_calculations current_savings
 
-      years_until_retirement = self.retirement_age.to_i - self.current_age.to_i
-      current_contribution   = self.annual_contributions.to_f
+      years_until_retirement = @retirement_age.to_i - @current_age.to_i
+      current_contribution   = @annual_contributions.to_f
 
-      this_years_interest  = (self.interest_rate.to_f) / 100
+      this_years_interest  = (@interest_rate.to_f) / 100
 
       years_until_retirement.to_i.times do 
         
@@ -111,7 +111,7 @@ class Calculator # < ActiveRecord::Base
         if (inflate_contributions?)
           Rails.logger.info "Inflate contributions was true."
           current_contribution = current_contribution * 
-                                    (1 + (self.inflation_rate.to_f / 100))
+                                    (1 + (@inflation_rate.to_f / 100))
           
           Rails.logger.info "Current Contribution = " + current_contribution.to_s
         end
@@ -123,10 +123,10 @@ class Calculator # < ActiveRecord::Base
 
     def retirement_calculations current_savings
 
-      years_until_retirement = self.retirement_age.to_i - self.current_age.to_i
-      years_of_retirement    = self.withdraw_until_age.to_i - self.retirement_age.to_i
-      retirement_int_rate    = self.post_retire_interest_rate.to_f / 100
-      infl_rate              = self.inflation_rate.to_f / 100
+      years_until_retirement = @retirement_age.to_i - @current_age.to_i
+      years_of_retirement    = @withdraw_until_age.to_i - @retirement_age.to_i
+      retirement_int_rate    = @post_retire_interest_rate.to_f / 100
+      infl_rate              = @inflation_rate.to_f / 100
       
       # http://www.financeformulas.net/
       numerator = retirement_int_rate - infl_rate
@@ -145,19 +145,19 @@ class Calculator # < ActiveRecord::Base
         # PV * e ** rt 
         after_inflation_yearly_rate = 
             yearly_ret_val_pretax * 
-              (Math::E ** ((-self.inflation_rate.to_f / 100) * years_until_retirement))
+              (Math::E ** ((-@inflation_rate.to_f / 100) * years_until_retirement))
         @yearly_retirement_income = 
-          after_inflation_yearly_rate * (1-(self.retirement_tax_rate.to_f/100))
+          after_inflation_yearly_rate * (1-(@retirement_tax_rate.to_f/100))
       else
         @yearly_retirement_income =  
-          (yearly_ret_val_pretax) * (1-(self.retirement_tax_rate.to_f/100))
+          (yearly_ret_val_pretax) * (1-(@retirement_tax_rate.to_f/100))
       end
     end
 
     def forfun current_savings
-      years_of_retirement = self.withdraw_until_age.to_i - self.retirement_age.to_i
-      retirement_int_rate = self.post_retire_interest_rate.to_f / 100
-      infl_rate           = self.inflation_rate.to_f / 100
+      years_of_retirement = @withdraw_until_age.to_i - @retirement_age.to_i
+      retirement_int_rate = @post_retire_interest_rate.to_f / 100
+      infl_rate           = @inflation_rate.to_f / 100
       
       numerator = retirement_int_rate - infl_rate
       denominator = 1 - ((1 + infl_rate)/(1 + retirement_int_rate))**years_of_retirement
