@@ -1,6 +1,10 @@
 class Calculator # < ActiveRecord::Base
-
+  # include ActiveAttr::Model
+  # include ActiveAttr::TypecastedAttributes
 	include ActiveModel::Model
+  
+  
+  # attribute :current_savings, :type => Integer, :default => 20
 
   attr_accessor :current_savings,
                 :interest_rate,
@@ -40,17 +44,25 @@ class Calculator # < ActiveRecord::Base
     show_in_todays_dollars: false
   }
 
+  # def current_savings
+  #   @current_savings.to_f
+  # end
+
+  # def current_savings=(value)
+  #   @current_savings = value.to_f
+  # end
+
   def initialize(params = DEFAULT_VALUES)
+
   	params.each do |attr, value|
-  		self.public_send("#{attr}=", value)
+  		public_send("#{attr}=", value)
   	end if params
+    
   end
 
 	def update(attributes)
-    if self.valid? 
+    if valid? 
       calculate
-    else
-      # return validation errors
     end
   end
 
@@ -79,17 +91,31 @@ class Calculator # < ActiveRecord::Base
   #   end
   # end
 
-
   private
+
+    def interest_rate_decimal
+      @interest_rate.to_f / 100
+    end
+
+    def inflation_rate_decimal
+      @inflation_rate.to_f / 100
+    end
+
+    def retirement_int_rate_decimal
+      @post_retire_interest_rate.to_f / 100
+    end
+
+    def retirement_tax_rate_decimal
+      @retirement_tax_rate.to_f / 100
+    end
 
 		def calculate
 
 	    current_savings = @current_savings.to_f
 
       current_savings = pre_retirement_calculations current_savings
-      retirement_calculations current_savings
+      calculate_yearly_retirement current_savings
 
-	    Rails.logger.info "Retirement income should be... " + @yearly_retirement_income.to_s
 	    return self
 
 	  end
@@ -98,78 +124,42 @@ class Calculator # < ActiveRecord::Base
 
       years_until_retirement = @retirement_age.to_i - @current_age.to_i
       current_contribution   = @annual_contributions.to_f
-
-      this_years_interest  = (@interest_rate.to_f) / 100
-
+      
       years_until_retirement.to_i.times do 
         
-        current_savings      = current_savings * (this_years_interest + 1)
-        Rails.logger.info "Current savings after interest: #{current_savings}"
+        current_savings      = current_savings * (1 + interest_rate_decimal)
         current_savings      = current_savings + current_contribution
-        Rails.logger.info "Current savings after payment: #{current_savings}"
         
         if (inflate_contributions?)
-          Rails.logger.info "Inflate contributions was true."
           current_contribution = current_contribution * 
-                                    (1 + (@inflation_rate.to_f / 100))
-          
-          Rails.logger.info "Current Contribution = " + current_contribution.to_s
+                                    (1 + inflation_rate_decimal)        
         end
-        Rails.logger.info "Current savings: #{current_savings}"
       end
 
       current_savings #return
     end
 
-    def retirement_calculations current_savings
+    def calculate_yearly_retirement current_savings
 
       years_until_retirement = @retirement_age.to_i - @current_age.to_i
       years_of_retirement    = @withdraw_until_age.to_i - @retirement_age.to_i
-      retirement_int_rate    = @post_retire_interest_rate.to_f / 100
-      infl_rate              = @inflation_rate.to_f / 100
       
       # http://www.financeformulas.net/
-      numerator = retirement_int_rate - infl_rate
-      denominator = 1 - ((1 + infl_rate)/(1 + retirement_int_rate))**years_of_retirement
+      numerator = retirement_int_rate_decimal - inflation_rate_decimal
+      denominator = 1 - ((1 + inflation_rate_decimal)/(1 + retirement_int_rate_decimal))**years_of_retirement
 
       yearly_ret_val_pretax = current_savings * (numerator/denominator)
 
-      # should the current_savings value might need initial adjustment for 
-      # inflation if show in today's dollars is checked?
-
-      Rails.logger.info "numerator = " + numerator.to_s
-      Rails.logger.info "denominator = " + denominator.to_s
-
       if (show_in_todays_dollars?)
-        Rails.logger.info "show_in_todays_dollars was checked"
         # PV * e ** rt 
         after_inflation_yearly_rate = 
             yearly_ret_val_pretax * 
-              (Math::E ** ((-@inflation_rate.to_f / 100) * years_until_retirement))
+              (Math::E ** ((-inflation_rate_decimal) * years_until_retirement))
         @yearly_retirement_income = 
-          after_inflation_yearly_rate * (1-(@retirement_tax_rate.to_f/100))
+          after_inflation_yearly_rate * (1 - retirement_tax_rate_decimal)
       else
         @yearly_retirement_income =  
-          (yearly_ret_val_pretax) * (1-(@retirement_tax_rate.to_f/100))
+          (yearly_ret_val_pretax) * (1 - retirement_tax_rate_decimal)
       end
-    end
-
-    def forfun current_savings
-      years_of_retirement = @withdraw_until_age.to_i - @retirement_age.to_i
-      retirement_int_rate = @post_retire_interest_rate.to_f / 100
-      infl_rate           = @inflation_rate.to_f / 100
-      
-      numerator = retirement_int_rate - infl_rate
-      denominator = 1 - ((1 + infl_rate)/(1 + retirement_int_rate))**years_of_retirement
-
-      fun_yearly_retirement_val = current_savings * (numerator/denominator)
-      Rails.logger.info "FOR FUN!!!!!!!!!!!!!!!!!!!!!!!!!"
-      Rails.logger.info "numerator = #{numerator}"
-      Rails.logger.info "denominator = #{denominator}"
-      Rails.logger.info "Years of retirment = #{years_of_retirement}"
-      Rails.logger.info "Inflation Rate = #{infl_rate}"
-      Rails.logger.info "current_savings = #{current_savings}"
-      Rails.logger.info "Payment in growth calc would be: #{fun_yearly_retirement_val}"
-      Rails.logger.info "FOR FUN!!!!!!!!!!!!!!!!!!!!!!!!!"
     end
 end

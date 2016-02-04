@@ -7,7 +7,7 @@ class CalculatorTest < ActiveSupport::TestCase
 
     # assert calc.yearly_retirement_income != nil,
     # 			"yearly_retirement_income should not be nil"
-    assert calc.yearly_retirement_income == 52447.82779508144
+    assert calc.yearly_retirement_income == 52447.82779508144, "Expected: 52447.82779508144. Actual: #{calc.yearly_retirement_income}"
   end
 
   test "should provide default values when new" do
