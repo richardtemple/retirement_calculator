@@ -1,16 +1,7 @@
 <%= form_for @calculator, url: calculator_path do |f| %>
-  <% if @calculator.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@calculator.errors.count, "error") %> prohibited this calculator from being saved:</h2>
 
-      <ul>
-      <% @calculator.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <%= render 'shared/error_messages', object: f.object %>
+  
   <div class="form-group">
     <%= f.label :current_savings %>
     <%= f.text_field :current_savings %>
