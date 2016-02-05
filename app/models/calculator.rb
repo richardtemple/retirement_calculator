@@ -1,10 +1,12 @@
 class Calculator # < ActiveRecord::Base
-  # include ActiveAttr::Model
-  # include ActiveAttr::TypecastedAttributes
+  include ActiveModel::AttributeMethods
 	include ActiveModel::Model
   
-  
-  # attribute :current_savings, :type => Integer, :default => 20
+  attribute_method_suffix  '_as_percentage'
+  define_attribute_methods :interest_rate, 
+                           :inflation_rate, 
+                           :post_retire_interest_rate, 
+                           :retirement_tax_rate
 
   attr_accessor :current_savings,
                 :interest_rate,
@@ -44,14 +46,6 @@ class Calculator # < ActiveRecord::Base
     show_in_todays_dollars: false
   }
 
-  # def current_savings
-  #   @current_savings.to_f
-  # end
-
-  # def current_savings=(value)
-  #   @current_savings = value.to_f
-  # end
-
   def initialize(params = DEFAULT_VALUES)
 
   	params.each do |attr, value|
@@ -82,57 +76,51 @@ class Calculator # < ActiveRecord::Base
     end
   end
 
-# This causes the checkbox to stay checked
-  # def show_in_todays_dollars=(show)
-  #   if show == 1
-  #     @show_in_todays_dollars = true
-  #   else
-  #     @show_in_todays_dollars = false
-  #   end
-  # end
-
   private
 
-    def interest_rate_decimal
-      @interest_rate.to_f / 100
+    def attribute_as_percentage(attr)
+      send("#{attr}").to_f / 100
     end
 
-    def inflation_rate_decimal
-      @inflation_rate.to_f / 100
-    end
-
-    def retirement_int_rate_decimal
-      @post_retire_interest_rate.to_f / 100
-    end
-
-    def retirement_tax_rate_decimal
-      @retirement_tax_rate.to_f / 100
-    end
+    # def make_boolean_of(value)
+    #   return case value
+    #     when "0" then false
+    #     when 0 then false
+    #     when "false" then false
+    #     when "" then false
+    #     when nil then false
+    #     when false then false
+    #     else true
+    #   end
+    # end
 
 		def calculate
 
+      Rails.logger.info (self.to_s)
 	    current_savings = @current_savings.to_f
 
       current_savings = pre_retirement_calculations current_savings
       calculate_yearly_retirement current_savings
 
 	    return self
-
 	  end
+
+    def years_until_retirement
+      @retirement_age.to_i - @current_age.to_i
+    end
 
     def pre_retirement_calculations current_savings
 
-      years_until_retirement = @retirement_age.to_i - @current_age.to_i
       current_contribution   = @annual_contributions.to_f
       
       years_until_retirement.to_i.times do 
         
-        current_savings      = current_savings * (1 + interest_rate_decimal)
+        current_savings      = current_savings * (1 + interest_rate_as_percentage)
         current_savings      = current_savings + current_contribution
         
         if (inflate_contributions?)
           current_contribution = current_contribution * 
-                                    (1 + inflation_rate_decimal)        
+                                    (1 + inflation_rate_as_percentage)        
         end
       end
 
@@ -141,12 +129,11 @@ class Calculator # < ActiveRecord::Base
 
     def calculate_yearly_retirement current_savings
 
-      years_until_retirement = @retirement_age.to_i - @current_age.to_i
       years_of_retirement    = @withdraw_until_age.to_i - @retirement_age.to_i
       
       # http://www.financeformulas.net/
-      numerator = retirement_int_rate_decimal - inflation_rate_decimal
-      denominator = 1 - ((1 + inflation_rate_decimal)/(1 + retirement_int_rate_decimal))**years_of_retirement
+      numerator = post_retire_interest_rate_as_percentage - inflation_rate_as_percentage
+      denominator = 1 - ((1 + inflation_rate_as_percentage)/(1 + post_retire_interest_rate_as_percentage))**years_of_retirement
 
       yearly_ret_val_pretax = current_savings * (numerator/denominator)
 
@@ -154,12 +141,12 @@ class Calculator # < ActiveRecord::Base
         # PV * e ** rt 
         after_inflation_yearly_rate = 
             yearly_ret_val_pretax * 
-              (Math::E ** ((-inflation_rate_decimal) * years_until_retirement))
+              (Math::E ** ((-inflation_rate_as_percentage) * years_until_retirement))
         @yearly_retirement_income = 
-          after_inflation_yearly_rate * (1 - retirement_tax_rate_decimal)
+          after_inflation_yearly_rate * (1 - retirement_tax_rate_as_percentage)
       else
         @yearly_retirement_income =  
-          (yearly_ret_val_pretax) * (1 - retirement_tax_rate_decimal)
+          (yearly_ret_val_pretax) * (1 - retirement_tax_rate_as_percentage)
       end
     end
 end
