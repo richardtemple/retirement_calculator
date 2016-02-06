@@ -135,7 +135,9 @@ class Calculator # < ActiveRecord::Base
       
       # http://www.financeformulas.net/
       numerator = post_retire_interest_rate_as_percentage - inflation_rate_as_percentage
-      denominator = 1 - ((1 + inflation_rate_as_percentage)/(1 + post_retire_interest_rate_as_percentage))**years_of_retirement
+      denominator = 1 - ((1 + inflation_rate_as_percentage)/
+                            (1 + post_retire_interest_rate_as_percentage))
+                        **years_of_retirement
 
       yearly_ret_val_pretax = current_savings * (numerator/denominator)
 
