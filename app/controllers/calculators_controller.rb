@@ -45,7 +45,7 @@ class CalculatorsController < ApplicationController
   def update
     Rails.logger.info "update start"
     respond_to do |format|
-      if @calculator.update(calculator_params)
+      if @calculator.update
         format.html { render :edit, notice: 'Calculator was successfully updated.' }
         format.json { render :show, status: :ok, location: @calculator }
       else

@@ -54,7 +54,7 @@ class Calculator # < ActiveRecord::Base
     
   end
 
-	def update(attributes)
+	def update #(attributes)
     if valid? 
       calculate
     end
@@ -94,22 +94,22 @@ class Calculator # < ActiveRecord::Base
     #   end
     # end
 
+    def years_until_retirement
+      @retirement_age.to_i - @current_age.to_i
+    end
+
 		def calculate
 
       Rails.logger.info (self.to_s)
 	    current_savings = @current_savings.to_f
 
-      current_savings = pre_retirement_calculations current_savings
+      current_savings = get_pre_retirement_calculations current_savings
       calculate_yearly_retirement current_savings
 
 	    return self
 	  end
 
-    def years_until_retirement
-      @retirement_age.to_i - @current_age.to_i
-    end
-
-    def pre_retirement_calculations current_savings
+    def get_pre_retirement_calculations current_savings
 
       current_contribution   = @annual_contributions.to_f
       
@@ -148,5 +148,6 @@ class Calculator # < ActiveRecord::Base
         @yearly_retirement_income =  
           (yearly_ret_val_pretax) * (1 - retirement_tax_rate_as_percentage)
       end
+      Rails.logger.info "yearly_retirement_income = #{yearly_retirement_income}"
     end
 end
