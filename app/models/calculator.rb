@@ -57,6 +57,8 @@ class Calculator # < ActiveRecord::Base
 	def update #(attributes)
     if valid? 
       calculate
+    else
+      self
     end
   end
 

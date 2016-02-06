@@ -27,8 +27,8 @@ class CalculatorTest < ActiveSupport::TestCase
     calc.current_savings = "abcd"
     assert calc.yearly_retirement_income == nil, "Calculator output should be nil still"
     calc = calc.update 
-    # assert calc.yearly_retirement_income == false,
-    #       "Expected: error. Actual: #{calc.yearly_retirement_income} "
+    assert calc.yearly_retirement_income == nil,
+          "Expected: error. Actual: #{calc.yearly_retirement_income} "
   end
 
   test "should correctly calculate the ARI in today's dollars" do
