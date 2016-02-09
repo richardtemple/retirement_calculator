@@ -12,8 +12,10 @@
 }
 
 body {
-	padding-left: 30px;
-	padding-top:  10px;
+	padding-left:   30px;
+	padding-right:  30px;
+	padding-top:    10px;
+	padding-bottom: 10px;
 }
 
 .form-group{
@@ -26,11 +28,19 @@ body {
 	margin-top: 30px;
 }
 
+.title {
+	margin-bottom: 15px;
+}
+
+.total {
+	margin-bottom: 15px;
+}
+
 .calculator {
     border-radius: 25px;
     border: 2px solid #aaa;
-    padding: 20px; 
-    width: 600px;
+    padding: 10px; 
+    width: 500px;
     margin: auto;
 }
 
