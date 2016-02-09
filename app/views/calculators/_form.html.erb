@@ -1,57 +1,61 @@
-<%= form_for @calculator, url: calculator_path do |f| %>
+<div class=" well well-lg spacer rcorners2" >
+  <%= form_for @calculator, url: calculator_path do |f| %>
 
-  <%= render 'shared/error_messages', object: f.object %>
-  
-  <div class="form-group">
-    <%= f.label :current_savings %>
-    <%= f.text_field :current_savings %>
-  </div>
-  <div class="form-group">
-    <%= f.label :interest_rate %>
-    <%= f.text_field :interest_rate %>
-  </div>
-  <div class="form-group">
-    <%= f.label :annual_contributions %>
-    <%= f.text_field :annual_contributions %>
-  </div>
-  <div class="form-group">
-    <%= f.label :inflate_contributions %>
-    <%= f.check_box :inflate_contributions %>
-  </div>
-  <div class="form-group">
-    <%= f.label :inflation_rate %>
-    <%= f.text_field :inflation_rate %>
-  </div>
-  <div class="form-group">
-    <%= f.label :current_age %>
-    <%= f.number_field :current_age %>
-  </div>
-  <div class="form-group">
-    <%= f.label :retirement_age %>
-    <%= f.number_field :retirement_age %>
-  </div>
-  <div class="form-group">
-    <%= f.label :withdraw_until_age %>
-    <%= f.number_field :withdraw_until_age %>
-  </div>
-  <div class="form-group">
-    <%= f.label :post_retire_interest_rate %>
-    <%= f.text_field :post_retire_interest_rate %>
-  </div>
-  <div class="form-group">
-    <%= f.label :retirement_tax_rate %>
-    <%= f.text_field :retirement_tax_rate %>
-  </div>
-  <div class="form-group">
-    <%= f.label :show_in_todays_dollars %>
-    <%= f.check_box :show_in_todays_dollars %>
-  </div>
-  <div class="actions">
-    <%= f.submit "Calculate!", class: 'btn btn-primary' %>
-  </div>
-  <p>
-  <div class="form-group">
-    <%= f.label :yearly_retirement_income %>
-    <%= number_to_currency @calculator.yearly_retirement_income %>
-  </div>
-<% end %>
+    <%= render 'shared/error_messages', object: f.object %>
+    
+    <div class="form-group">
+      <%= f.label :current_savings %>
+      <%= f.text_field :current_savings, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :interest_rate %>
+      <%= f.text_field :interest_rate, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :annual_contributions %>
+      <%= f.text_field :annual_contributions, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :inflate_contributions %>
+      <%= f.check_box :inflate_contributions, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :inflation_rate %>
+      <%= f.text_field :inflation_rate, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :current_age %>
+      <%= f.number_field :current_age, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :retirement_age %>
+      <%= f.number_field :retirement_age, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :withdraw_until_age %>
+      <%= f.number_field :withdraw_until_age, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :post_retire_interest_rate %>
+      <%= f.text_field :post_retire_interest_rate, class: 'form-control'  %>
+    </div>
+    <div class="form-group">
+      <%= f.label :retirement_tax_rate %>
+      <%= f.text_field :retirement_tax_rate , class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :show_in_todays_dollars %>
+      <%= f.check_box :show_in_todays_dollars, class: 'form-control'  %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Calculate!", class: 'btn btn-primary' %>
+    </div>
+    <p>
+    <div class="text-center spacer">
+      <h4>
+        <%= f.label :yearly_retirement_income %>:&nbsp;
+        <%= number_to_currency @calculator.yearly_retirement_income %>
+      </h4>
+    </div>
+  <% end %>
+</div>

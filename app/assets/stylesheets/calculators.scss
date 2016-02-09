@@ -3,6 +3,14 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+
+@mixin box_sizing {
+  -moz-box-sizing:     border-box;
+  -webkit-box-sizing:  border-box; 
+  box-sizing:          border-box;
+}
+
 body {
 	padding-left: 30px;
 	padding-top:  10px;
@@ -12,4 +20,54 @@ body {
 	label{
 		width: 180px;
 	}
+}
+
+.spacer {
+	margin-top: 20px;
+}
+
+.rcorners2 {
+    border-radius: 25px;
+    border: 2px solid #aaa;
+    padding: 20px; 
+}
+
+
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 30%;
+  margin-bottom: 1px;
+  @include box_sizing;
+}
+
+input {
+  height: auto !important;
+}
+
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 20px 0;
+  }
+}
+
+.field_with_errors {
+  @extend .has-error;
+  display: inline;
+  .form-control {
+    color: $state-danger-text;
+    width: 30%;
+    display: inline;
+  }
+}
+
+.form-control {
+	width: 30%;
+	display: inline;
+	line-height: 14px;
+}
+.form-group-wide {
+	@extend .form-group;
+	width: 350px;
 }
