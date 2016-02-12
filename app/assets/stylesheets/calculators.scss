@@ -21,6 +21,8 @@ body {
 .form-group{
 	label{
 		width: 180px;
+		text-align: right;
+		margin-right: 10px;
 	}
 }
 
@@ -49,6 +51,7 @@ input, textarea, select, .uneditable-input {
   border: 1px solid #bbb;
   width: 30%;
   margin-bottom: 1px;
+  text-align: left;
   @include box_sizing;
 }
 
