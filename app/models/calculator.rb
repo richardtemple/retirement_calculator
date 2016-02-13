@@ -131,11 +131,17 @@ class Calculator # < ActiveRecord::Base
 
     def calculate_yearly_retirement current_savings
 
-      years_of_retirement    = @withdraw_until_age.to_i - @retirement_age.to_i
-      
+      years_of_retirement  = @withdraw_until_age.to_i - @retirement_age.to_i
+      inflation_rate_value = inflation_rate_as_percentage
+
+      # To avoid divide by zero
+      if (inflation_rate_value - post_retire_interest_rate_as_percentage == 0)
+        inflation_rate_value = inflation_rate_value + 0.0000001
+      end
+
       # http://www.financeformulas.net/
-      numerator = post_retire_interest_rate_as_percentage - inflation_rate_as_percentage
-      denominator = 1 - ((1 + inflation_rate_as_percentage)/
+      numerator = post_retire_interest_rate_as_percentage - inflation_rate_value
+      denominator = 1 - ((1 + inflation_rate_value)/
                             (1 + post_retire_interest_rate_as_percentage))**years_of_retirement
 
       yearly_ret_val_pretax = current_savings * (numerator/denominator)
