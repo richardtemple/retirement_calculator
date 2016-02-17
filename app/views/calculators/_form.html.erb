@@ -7,7 +7,7 @@
       
       <div class="form-group spacer">
         <%= f.label :current_savings %>
-        <%= f.text_field :current_savings, class: 'form-control'  %>
+        <%= f.text_field :current_savings, value: number_with_precision(@calculator.current_savings, :precision => 2), class: 'form-control'  %>
       </div>
       <div class="form-group">
         <%= f.label :interest_rate %>
@@ -15,7 +15,7 @@
       </div>
       <div class="form-group">
         <%= f.label :annual_contributions %>
-        <%= f.text_field :annual_contributions, class: 'form-control'  %>
+        <%= f.text_field :annual_contributions, value: number_with_precision(@calculator.annual_contributions, :precision => 2), class: 'form-control'  %>
       </div>
       <div class="form-group">
         <%= f.label :inflate_contributions %>

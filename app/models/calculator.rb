@@ -1,7 +1,7 @@
 class Calculator # < ActiveRecord::Base
   include ActiveModel::AttributeMethods
 	include ActiveModel::Model
-  
+
   attribute_method_suffix  '_as_percentage'
   define_attribute_methods :interest_rate, 
                            :inflation_rate, 
@@ -136,7 +136,7 @@ class Calculator # < ActiveRecord::Base
 
       # To avoid divide by zero
       if (inflation_rate_value - post_retire_interest_rate_as_percentage == 0)
-        inflation_rate_value = inflation_rate_value + 0.0000001
+        inflation_rate_value = inflation_rate_value + 0.00000001
       end
 
       # http://www.financeformulas.net/
