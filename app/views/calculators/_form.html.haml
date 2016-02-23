@@ -1,0 +1,60 @@
+.text-center.container
+  .well.well-lg#calculator
+    %h1#title Retirement Calculator
+    = form_for @calculator, url: calculator_path do |f|
+
+      = render 'shared/error_messages', object: f.object
+      
+      .form-group.spacer
+        = f.label :current_savings
+        = f.text_field :current_savings, value: number_with_precision(@calculator.current_savings, :precision => 2), class: 'form-control'
+      .form-group
+        = f.label :interest_rate 
+        = f.text_field :interest_rate, class: 'form-control' 
+
+      .form-group
+        = f.label :annual_contributions
+        = f.text_field :annual_contributions, value: number_with_precision(@calculator.annual_contributions, :precision => 2), class: 'form-control'
+
+      .form-group
+        = f.label :inflate_contributions
+        = f.check_box :inflate_contributions, class: 'form-control'
+
+      .form-group
+        = f.label :inflation_rate
+        = f.text_field :inflation_rate, class: 'form-control'
+
+      .form-group
+        = f.label :current_age
+        = f.number_field :current_age, class: 'form-control'
+
+      .form-group
+        = f.label :retirement_age
+        = f.number_field :retirement_age, class: 'form-control'
+
+      .form-group
+        = f.label :withdraw_until_age
+        = f.number_field :withdraw_until_age, class: 'form-control'
+
+      .form-group
+        = f.label :post_retire_interest_rate
+        = f.text_field :post_retire_interest_rate, class: 'form-control'
+
+      .form-group
+        = f.label :retirement_tax_rate
+        = f.text_field :retirement_tax_rate , class: 'form-control'
+
+      .form-group
+        = f.label :show_in_todays_dollars
+        = f.check_box :show_in_todays_dollars, class: 'form-control'
+
+      .actions
+        = f.submit "Calculate!", class: 'btn btn-primary'
+
+      %p
+      .text-center.spacer#total
+        %h4
+          = f.label :yearly_retirement_income
+          \:
+          = number_to_currency @calculator.yearly_retirement_income
+
