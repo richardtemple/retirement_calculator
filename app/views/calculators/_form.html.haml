@@ -54,7 +54,8 @@
       %p
       .text-center.spacer#total
         %h4
-          = f.label :yearly_retirement_income
-          \:
+          %span>= f.label :yearly_retirement_income
+          \: 
+
           = number_to_currency @calculator.yearly_retirement_income
 
