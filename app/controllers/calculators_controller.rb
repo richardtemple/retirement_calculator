@@ -5,25 +5,27 @@ class CalculatorsController < ApplicationController
     @calculator = Calculator.new
     respond_to do |format|
       format.html { render :edit }
+      format.js
     end
-  end
-
-  # GET /calculators/1/edit
-  def edit
   end
 
   # PATCH/PUT /calculators/1
   # PATCH/PUT /calculators/1.json
   def update
-    Rails.logger.info "update start"
-    respond_to do |format|
-      if @calculator.update
+    Rails.logger.info "Begin update"
+    if @calculator.update
+      respond_to do |format|
         format.html { render :edit, notice: 'Calculator was successfully updated.' }
+        format.js
         format.json { render :show, status: :ok, location: @calculator }
-      else
-        format.html { render :edit }
-        format.json { render json: @calculator.errors, status: :unprocessable_entity }
       end
+    else
+        Rails.logger.info "Calculator wasn't valid"
+        respond_to do |format|
+          format.js { render :edit }
+          format.html { render :edit }
+          format.json { render json: @calculator.errors, status: :unprocessable_entity }
+        end
     end
   end
 

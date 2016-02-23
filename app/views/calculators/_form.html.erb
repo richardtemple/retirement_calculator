@@ -1,7 +1,7 @@
 <div class="text-center container">
   <div class=" well well-lg " id="calculator" >
     <h1 id="title">Retirement Calculator</h1>
-    <%= form_for @calculator, url: calculator_path do |f| %>
+    <%= form_for @calculator, remote: true, url: calculator_path do |f| %>
 
       <%= render 'shared/error_messages', object: f.object %>
       
@@ -50,13 +50,14 @@
         <%= f.check_box :show_in_todays_dollars, class: 'form-control'  %>
       </div>
       <div class="actions">
-        <%= f.submit "Calculate!", class: 'btn btn-primary' %>
+        <%= button_to "Calculate!", calculator_path(), remote: true, class: 'btn btn-primary' %>
       </div>
       <p>
       <div class="text-center spacer" id="total">
         <h4>
           <%= f.label :yearly_retirement_income %>:&nbsp;
-          <%= number_to_currency @calculator.yearly_retirement_income %>
+          <label id="yearly-total"></label>
+          <%= number_to_currency @calculator.yearly_retirement_income, id: "yearly-total" %>
         </h4>
       </div>
     <% end %>
